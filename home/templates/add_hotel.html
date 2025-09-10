@@ -1,0 +1,54 @@
+<!--add_hotel.html-->
+{% extends "vbase.html" %}
+
+{% block start %}
+    <div class="container mt-5 pt-5 pb-5">
+        <div class="col-6 mx-auto card shadow p-4" style="border:none">
+            <h2>Add Hotel</h2>
+            <form method="POST">
+                {% include "alerts.html" %}
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="hotel_name" class="form-label">Hotel Name</label>
+                    <input type="text" name="hotel_name" class="form-control" id="hotel_name" required>
+                </div>
+
+                <div class="mb-3">
+                    <div class="form-floating">
+                        <textarea name="hotel_description" class="form-control" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
+                        <label for="floatingTextarea">Hotel Description</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="hotel_price" class="form-label">Hotel Price</label>
+                    <input type="number" name="hotel_price" class="form-control" id="hotel_price" step="0.01" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="hotel_offer_price" class="form-label">Hotel Offer Price</label>
+                    <input type="number" name="hotel_offer_price" class="form-control" id="hotel_offer_price" step="0.01">
+                </div>
+
+                <div class="mb-3">
+                    <label for="hotel_location" class="form-label">Hotel Location</label>
+                    <input type="text" name="hotel_location" class="form-control" id="hotel_location" required>
+                </div>
+
+                <!-- Fixed Amenities Section -->
+                <div class="mb-3">
+                    <label for="amenities" class="form-label">Hotel Amenities</label>
+                    <select name="amenities" class="form-select form-select-sm" multiple aria-label="Select amenities">
+                        {% for amenity in amenities %}
+                            <option value="{{ amenity.id }}">{{ amenity.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="form-text">Hold Ctrl (or Cmd on Mac) to select multiple amenities</div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

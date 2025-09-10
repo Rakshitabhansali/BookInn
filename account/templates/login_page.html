@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block start %}
+
+    <div class="col-6 mx-auto card shadow p-4" style="border:none">
+        <form method="POST" autocomplete="off">
+            {% include "alerts.html" %}
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input id="email"
+                       type="email"
+                       name="email"
+                       class="form-control"
+                       value=""
+                       autocomplete="off"
+                       placeholder="Enter your email"
+                       aria-describedby="emailHelp"
+                       required>
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input id="password"
+                       type="password"
+                       name="password"
+                       class="form-control"
+                       value=""
+                       autocomplete="new-password"
+                       placeholder="Enter your password"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="button" class="btn btn-success" onclick="sendOtp()">Login with OTP</button>
+        </form>
+    </div>
+
+    <script>
+        // Clear form fields on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        });
+
+        function sendOtp(){
+            var email = document.getElementById('email').value.trim();
+
+            if(email == ""){
+                alert("Please enter your email address");
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            // Basic email validation
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailRegex.test(email)){
+                alert("Please enter a valid email address");
+                document.getElementById('email').focus();
+                return false;
+            }
+
+            // Redirect to send OTP
+            window.location.href = `/account/send_otp/${email}/`;
+        }
+    </script>
+
+{% endblock %}

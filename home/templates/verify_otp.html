@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block start %}
+
+    <div class="container mt-5 pt-5 pb-5">
+        <div class="col-6 mx-auto card shadow p-4" style="border:none">
+            {% include "alerts.html" %}
+
+            <div class="text-center mb-4">
+                <h4>Enter OTP</h4>
+                <p class="text-muted">We've sent a 4-digit code to {{ email }}</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="otp" class="form-label">Enter OTP</label>
+                    <input type="text"
+                           name="otp"
+                           id="otp"
+                           class="form-control text-center"
+                           placeholder="Enter 4-digit OTP"
+                           maxlength="4"
+                           pattern="[0-9]{4}"
+                           autocomplete="off"
+                           required
+                           style="font-size: 1.5rem; letter-spacing: 0.5rem;">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">Verify OTP</button>
+
+                <div class="text-center">
+                    <a href="{% url 'login_page' %}" class="btn btn-link">Back to Login</a>
+                    <span class="mx-2">|</span>
+                    <a href="{% url 'send_otp' email %}" class="btn btn-link">Resend OTP</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Auto focus on OTP input
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('otp').focus();
+        });
+
+        // Only allow numbers in OTP field
+        document.getElementById('otp').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        });
+    </script>
+
+{% endblock %}

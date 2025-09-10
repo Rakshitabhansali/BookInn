@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block start %}
+
+    <div class="col-6 mx-auto card shadow p-4" style="border:none">
+        <form method="POST">
+            {% include "alerts.html" %}
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">OTP</label>
+                <input type="text" name="otp" class="form-control" id="exampleInputPassword1">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    </div>
+
+    <script>
+        function sendOtp(){
+            var email= document.getElementById('email').value
+            if(email==""){
+                alert("Email cannot be Blank")
+            }
+            window.location.href=`/account/send_otp/${email}/`
+        }
+    </script>
+
+{% endblock %}

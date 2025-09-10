@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block start %}
+    <div class="container">
+        <div class="card-body mt-5">
+            <!-- Display the hotel name -->
+            <h5 class="card-title">{{ hotel.hotel_name }}</h5>
+
+            <!-- Display the hotel prices -->
+            Price <span class="badge text-bg-danger">{{ hotel.hotel_price }}</span>
+            Offer Price <span class="badge text-bg-success">{{ hotel.hotel_offer_price }}</span>
+            <hr>
+
+            <!-- Display the hotel location -->
+            <p>{{ hotel.hotel_location }}</p>
+
+            <!-- Display dynamic amenities instead of hardcoded ones -->
+            <div class="mb-3">
+                {% for amenity in hotel.amenities.all %}
+                    <span class="badge text-bg-primary me-1 mb-1">{{ amenity.name }}</span>
+                {% empty %}
+                    <span class="badge text-bg-secondary">No amenities available</span>
+                {% endfor %}
+            </div>
+
+            <!-- Display the hotel description -->
+            <p class="mt-5">{{ hotel.hotel_description|safe }}</p>
+
+            <!-- Display the hotel images with better styling -->
+            <div class="row mt-4">
+                {% for image in hotel.hotel_images.all %}
+                    <div class="col-md-4 col-sm-6 mb-3">
+                        <img src="/media/{{ image.image }}" class="img-fluid rounded shadow"
+                             alt="{{ image.alt_text|default:hotel.hotel_name }}"
+                             style="height: 200px; object-fit: cover; width: 100%;">
+                    </div>
+                {% empty %}
+                    <div class="col-12">
+                        <p class="text-muted">No images available for this hotel.</p>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Booking Form - Only show if user is authenticated -->
+            {% if request.user.is_authenticated %}
+                <div class="mt-5">
+                    <h4 class="mb-4">Book Your Stay</h4>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% include "alerts.html" %}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="start_date" class="form-label">Check-in Date</label>
+                                    <input type="date" name="start_date" class="form-control" id="start_date" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="end_date" class="form-label">Check-out Date</label>
+                                    <input type="date" name="end_date" class="form-control" id="end_date" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="guests" class="form-label">Number of Guests</label>
+                                    <select name="guests" class="form-control" id="guests" required>
+                                        <option value="">Select guests</option>
+                                        <option value="1">1 Guest</option>
+                                        <option value="2">2 Guests</option>
+                                        <option value="3">3 Guests</option>
+                                        <option value="4">4 Guests</option>
+                                        <option value="5">5+ Guests</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="rooms" class="form-label">Number of Rooms</label>
+                                    <select name="rooms" class="form-control" id="rooms" required>
+                                        <option value="">Select rooms</option>
+                                        <option value="1">1 Room</option>
+                                        <option value="2">2 Rooms</option>
+                                        <option value="3">3 Rooms</option>
+                                        <option value="4">4+ Rooms</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="special_requests" class="form-label">Special Requests (Optional)</label>
+                            <textarea name="special_requests" class="form-control" id="special_requests" rows="3" placeholder="Any special requests or preferences..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-lg">
+                            <i class="bi bi-calendar-check"></i> Book Now
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="mt-5 text-center">
+                    <p class="mb-3">Please log in to book this hotel</p>
+                    <a href="{% url 'login_page' %}" class="btn btn-success btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Login to Book
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Set minimum date to today for check-in
+        document.getElementById('start_date').min = new Date().toISOString().split('T')[0];
+
+        // Update check-out minimum date based on check-in selection
+        document.getElementById('start_date').addEventListener('change', function() {
+            var startDate = new Date(this.value);
+            var nextDay = new Date(startDate);
+            nextDay.setDate(nextDay.getDate() + 1);
+            document.getElementById('end_date').min = nextDay.toISOString().split('T')[0];
+        });
+    </script>
+{% endblock %}
