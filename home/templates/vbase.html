@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,11 +11,11 @@
 
 
 <nav class="navbar navbar-expand-lg  navbar-dark bg-dark shadow-lg p-2 nav">
-    }
     <div class="container-fluid">
 
         <a class="navbar-brand" href="/">
-            <img height="40" src="https://i.pinimg.com/736x/60/20/3c/60203c06b364a8764b54bba1a35290c2.jpg">      </a>
+            <img height="40" src="{% static 'logo.png' %}" alt="Logo">
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -22,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'vdashboard'%}">Dashoard</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'vdashboard'%}">Dashboard</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login_vendor'%}">Login</a>
@@ -44,7 +45,7 @@
 
 
 <div class="bg-dark p-5 mt-5">
-    <p class="text-center text-white">All Right reserved 2024. OYO CLONE |
+    <p class="text-center text-white">All Right reserved 2024. BookInn |
         <a href="{% url 'login_vendor' %}">Login Vendor</a> |  <a href="{% url 'register_vendor'%}">Register Vendor</a></p>
 </div>
 
